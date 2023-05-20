@@ -18,7 +18,7 @@ public interface StatsRepo extends JpaRepository<StatsRecord, Long> {
             "GROUP BY r.app, r.uri " +
             "ORDER BY COUNT(r.uri) DESC")
     List<StatsResponseDto> getStatsForDates(@Param("start") LocalDateTime start,
-                                                   @Param("end") LocalDateTime end);
+                                            @Param("end") LocalDateTime end);
 
     @Query("SELECT new ewm_dto.domain_dto.StatsResponseDto(r.app, r.uri, COUNT(r.uri)) " +
             "FROM StatsRecord as r " +
@@ -36,7 +36,7 @@ public interface StatsRepo extends JpaRepository<StatsRecord, Long> {
             "GROUP BY r.app, r.uri " +
             "ORDER BY COUNT(DISTINCT r.ip) DESC")
     List<StatsResponseDto> getStatsForDatesWithUniqueIp(@Param("start") LocalDateTime start,
-                                                               @Param("end") LocalDateTime end);
+                                                        @Param("end") LocalDateTime end);
 
     @Query("SELECT new ewm_dto.domain_dto.StatsResponseDto(r.app, r.uri, COUNT(DISTINCT r.ip)) " +
             "FROM StatsRecord as r " +
@@ -45,6 +45,6 @@ public interface StatsRepo extends JpaRepository<StatsRecord, Long> {
             "GROUP BY r.app, r.uri " +
             "ORDER BY COUNT(DISTINCT r.ip) DESC")
     List<StatsResponseDto> getStatsForDatesAndUrisWithUniqueIp(@Param("start") LocalDateTime start,
-                                                  @Param("end") LocalDateTime end,
-                                                  @Param("uris") String[] uris);
+                                                               @Param("end") LocalDateTime end,
+                                                               @Param("uris") String[] uris);
 }

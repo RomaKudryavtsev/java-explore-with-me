@@ -24,9 +24,9 @@ public class StatsClientController {
 
     @GetMapping("/stats")
     public Flux<StatsResponseDto> getStats(@RequestParam("start") String start,
-                                            @RequestParam("end") String end,
-                                            @RequestParam(value = "uris", required = false) String[] uris,
-                                            @RequestParam(value = "unique", required = false) String unique) {
+                                           @RequestParam("end") String end,
+                                           @RequestParam(value = "uris", required = false) String[] uris,
+                                           @RequestParam(value = "unique", required = false) String unique) {
         return statsClient.getStats(start, end, uris, unique);
     }
 }

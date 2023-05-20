@@ -31,15 +31,15 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsResponseDto> getStats(String start, String end, String[] uris, String unique) {
-        if(unique == null && uris == null) {
+        if (unique == null && uris == null) {
             return statsRepo.getStatsForDates(parseDateTime(start), parseDateTime(end));
-        } else if(unique != null && uris == null) {
-            if(Boolean.parseBoolean(unique)) {
+        } else if (unique != null && uris == null) {
+            if (Boolean.parseBoolean(unique)) {
                 return statsRepo.getStatsForDatesWithUniqueIp(parseDateTime(start), parseDateTime(end));
             } else {
                 return statsRepo.getStatsForDates(parseDateTime(start), parseDateTime(end));
             }
-        } else if(unique == null) {
+        } else if (unique == null) {
             return statsRepo.getStatsForDatesAndUris(parseDateTime(start), parseDateTime(end), uris);
         } else {
             if (Boolean.parseBoolean(unique)) {

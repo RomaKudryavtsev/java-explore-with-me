@@ -24,7 +24,7 @@ public class StatsClient {
     }
 
     public Flux<StatsResponseDto> getStats(String start, String end, String[] uris, String unique) {
-        if(uris == null) {
+        if (uris == null) {
             return getStatsWithoutUri(start, end, unique);
         } else {
             return getStatsWithUri(start, end, uris, unique);
