@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class StatsServiceImpl implements StatsService {
-    private final static DateTimeFormatter REQUEST_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter REQUEST_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final StatsRepo statsRepo;
 
     @Autowired
