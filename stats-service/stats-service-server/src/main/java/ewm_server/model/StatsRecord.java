@@ -1,9 +1,6 @@
 package ewm_server.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,8 +18,8 @@ public class StatsRecord {
     String app;
     @Column(name = "uri")
     String uri;
+    @Column(name = "ip")
+    String ip;
     @Column(name = "timestamp")
     LocalDateTime timestamp;
-    @Column(name = "hits")
-    Integer hits;
 }
