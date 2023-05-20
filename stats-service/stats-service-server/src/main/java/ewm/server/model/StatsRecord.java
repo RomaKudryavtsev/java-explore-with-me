@@ -1,4 +1,4 @@
-package ewm_server.model;
+package ewm.server.model;
 
 import lombok.*;
 
