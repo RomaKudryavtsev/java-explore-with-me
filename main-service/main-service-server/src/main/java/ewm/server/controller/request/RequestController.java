@@ -1,7 +1,7 @@
 package ewm.server.controller.request;
 
 import ewm.server.dto.request.ParticipationRequestDto;
-import ewm.server.service.event.RequestService;
+import ewm.server.service.request.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
