@@ -1,10 +1,10 @@
 package ewm.server.mapper;
 
-import ewm.server.dto.EventFullDto;
-import ewm.server.dto.NewEventDto;
+import ewm.server.dto.event.EventFullDto;
+import ewm.server.dto.event.NewEventDto;
 import ewm.server.model.event.Event;
-import ewm.server.model.event.ParticipationRequest;
-import ewm.server.model.event.RequestStatus;
+import ewm.server.model.request.ParticipationRequest;
+import ewm.server.model.request.RequestStatus;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

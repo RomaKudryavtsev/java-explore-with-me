@@ -1,4 +1,4 @@
-package ewm.server.dto;
+package ewm.server.dto.category;
 
 import lombok.AccessLevel;
 import lombok.Builder;
