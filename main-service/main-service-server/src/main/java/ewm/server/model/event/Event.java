@@ -57,8 +57,8 @@ public class Event {
     @OneToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     Location location;
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     User initiator;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
