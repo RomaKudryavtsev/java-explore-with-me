@@ -1,11 +1,13 @@
 package ewm.server.service.request;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import ewm.server.dto.request.ParticipationRequestDto;
 import ewm.server.exception.event.EventNotFoundException;
 import ewm.server.exception.request.RequestNotFoundException;
 import ewm.server.exception.user.UserNotFoundException;
 import ewm.server.mapper.request.RequestMapper;
 import ewm.server.model.request.ParticipationRequest;
+import ewm.server.model.request.QParticipationRequest;
 import ewm.server.model.request.RequestStatus;
 import ewm.server.repo.event.EventRepo;
 import ewm.server.repo.request.RequestRepo;
@@ -14,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +49,15 @@ public class RequestServiceImpl implements RequestService {
         });
         toBeCanceled.setRequestStatus(RequestStatus.CANCELED);
         return RequestMapper.mapModelToDto(requestRepo.save(toBeCanceled));
+    }
+
+    @Override
+    public List<ParticipationRequestDto> getUsersRequests(Long userId) {
+        QParticipationRequest qRequest = QParticipationRequest.participationRequest;
+        BooleanExpression byRequesterId = qRequest.requester.id.eq(userId);
+        return StreamSupport.stream(requestRepo.findAll(byRequesterId).spliterator(), false)
+                .map(RequestMapper::mapModelToDto)
+                .collect(Collectors.toList());
     }
 
     private void checkIfUserExists(Long userId) {
