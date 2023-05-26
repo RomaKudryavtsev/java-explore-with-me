@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ParticipationRequestDto {
-    LocalDateTime created;
+    String created;
     Long event;
     Long id;
     Long requester;
