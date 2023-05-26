@@ -1,6 +1,7 @@
 package ewm.server.mapper.event;
 
 import ewm.server.dto.event.EventFullDto;
+import ewm.server.dto.event.EventShortDto;
 import ewm.server.dto.event.NewEventDto;
 import ewm.server.mapper.category.CategoryMapper;
 import ewm.server.mapper.user.UserMapper;
@@ -42,7 +43,7 @@ public class EventMapper {
         return event;
     }
 
-    public static EventFullDto mapModelToDto(Event event) {
+    public static EventFullDto mapModelToFullDto(Event event) {
         return EventFullDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -61,6 +62,21 @@ public class EventMapper {
                 .participantLimit(event.getParticipationLimit())
                 .publishedOn(serializePublishOnFunc.apply(event.getPublishedOn()))
                 .requestModeration(event.getRequestModeration())
+                .build();
+    }
+
+    public static EventShortDto mapModelToShortDto(Event event) {
+        return EventShortDto.builder()
+                .id(event.getId())
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.mapModelToDto(event.getCategory()))
+                .confirmedRequests(calculateConfirmedRequestFunc.apply(event.getRequests()))
+                .eventDate(event.getEventDate().format(REQUEST_TIME_FORMAT))
+                .initiator(UserMapper.mapModelToDto(event.getInitiator()))
+                .paid(event.getPaid())
+                .title(event.getTitle())
+                //TODO: get from stats
+                .views(0)
                 .build();
     }
 }
