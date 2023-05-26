@@ -39,8 +39,8 @@ public class EventController {
 
     @PatchMapping(value = EVENT_PRIVATE_PATH + "/{eventId}")
     public ResponseEntity<EventFullDto> updateEventPrivate(@PathVariable("userId") Long userId,
-                                                        @PathVariable("eventId") Long eventId,
-                                                        @Valid @RequestBody UpdateEventRequest updateRequest) {
+                                                           @PathVariable("eventId") Long eventId,
+                                                           @Valid @RequestBody UpdateEventRequest updateRequest) {
         return ResponseEntity.ok().body(eventService.updateEventPrivate(userId, eventId, updateRequest));
     }
 
