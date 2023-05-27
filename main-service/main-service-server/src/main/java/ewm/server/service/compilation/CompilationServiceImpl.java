@@ -71,6 +71,11 @@ public class CompilationServiceImpl implements CompilationService {
         return compilations.stream().map(CompilationMapper::mapModelToDto).collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteCompilation(Long compId) {
+        compilationRepo.deleteById(compId);
+    }
+
     private Pageable makePageRequest(int from, int size) {
         return PageRequest.of(from > 0 ? from / size : 0, size);
     }
