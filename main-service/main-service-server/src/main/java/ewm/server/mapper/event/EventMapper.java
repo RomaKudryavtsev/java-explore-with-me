@@ -57,7 +57,7 @@ public class EventMapper {
                 .title(event.getTitle())
                 //TODO: get from stats
                 .views(0)
-                .initiator(UserMapper.mapModelToDto(event.getInitiator()))
+                .initiator(UserMapper.mapModelToShortDto(event.getInitiator()))
                 .location(LocationMapper.mapModelToDto(event.getLocation()))
                 .participantLimit(event.getParticipationLimit())
                 .publishedOn(serializePublishOnFunc.apply(event.getPublishedOn()))
@@ -72,7 +72,7 @@ public class EventMapper {
                 .category(CategoryMapper.mapModelToDto(event.getCategory()))
                 .confirmedRequests(calculateConfirmedRequestFunc.apply(event.getRequests()))
                 .eventDate(event.getEventDate().format(REQUEST_TIME_FORMAT))
-                .initiator(UserMapper.mapModelToDto(event.getInitiator()))
+                .initiator(UserMapper.mapModelToShortDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 //TODO: get from stats
