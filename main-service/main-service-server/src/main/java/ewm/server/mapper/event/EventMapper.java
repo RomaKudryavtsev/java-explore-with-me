@@ -35,10 +35,10 @@ public class EventMapper {
         Event event = new Event();
         event.setAnnotation(dto.getAnnotation());
         event.setDescription(dto.getDescription());
-        event.setPaid(dto.getPaid());
+        event.setPaid(dto.getPaid() == null ? false : dto.getPaid());
         event.setEventDate(LocalDateTime.parse(dto.getEventDate(), REQUEST_TIME_FORMAT));
         event.setParticipationLimit(dto.getParticipantLimit());
-        event.setRequestModeration(dto.getRequestModeration());
+        event.setRequestModeration(dto.getRequestModeration() == null ? true : dto.getRequestModeration());
         event.setTitle(dto.getTitle());
         return event;
     }
