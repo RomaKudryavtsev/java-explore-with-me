@@ -22,7 +22,6 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "title")
-    @Length(max = 50)
     String title;
     @Column(name = "pinned")
     Boolean pinned;

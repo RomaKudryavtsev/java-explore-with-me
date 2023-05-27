@@ -30,8 +30,12 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto addCompilation(NewCompilationDto newCompilationDto) {
         //checkIfAllEventsExist(newCompilationDto.getEvents());
         Compilation toBeAdded = CompilationMapper.mapDtoToModel(newCompilationDto);
-        List<Event> eventsToBeCompiled = eventRepo.findAllById(newCompilationDto.getEvents());
-        toBeAdded.setEvents(new HashSet<>(eventsToBeCompiled));
+        if(newCompilationDto.getEvents() != null) {
+            List<Event> eventsToBeCompiled = eventRepo.findAllById(newCompilationDto.getEvents());
+            toBeAdded.setEvents(new HashSet<>(eventsToBeCompiled));
+        } else {
+            toBeAdded.setEvents(new HashSet<>());
+        }
         return CompilationMapper.mapModelToDto(compilationRepo.save(toBeAdded));
     }
 
@@ -54,7 +58,6 @@ public class CompilationServiceImpl implements CompilationService {
         return CompilationMapper.mapModelToDto(compilationFound);
     }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Override
     public List<CompilationDto> getAllCompilations(Optional<Boolean> pinned, int from, int size) {
         Pageable request = makePageRequest(from, size);
