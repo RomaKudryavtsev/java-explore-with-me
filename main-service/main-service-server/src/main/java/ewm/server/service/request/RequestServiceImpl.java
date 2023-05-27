@@ -6,6 +6,7 @@ import ewm.server.exception.event.EventNotFoundException;
 import ewm.server.exception.request.RequestNotFoundException;
 import ewm.server.exception.user.UserNotFoundException;
 import ewm.server.mapper.request.RequestMapper;
+import ewm.server.model.event.Event;
 import ewm.server.model.request.ParticipationRequest;
 import ewm.server.model.request.QParticipationRequest;
 import ewm.server.model.request.RequestStatus;
@@ -30,13 +31,18 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public ParticipationRequestDto addRequest(Long userId, Long eventId) {
         ParticipationRequest newRequest = new ParticipationRequest();
+        Event eventFound = eventRepo.findById(eventId).orElseThrow(() -> {
+            throw new EventNotFoundException("Event does not exist");
+        });
         newRequest.setRequester(userRepo.findById(userId).orElseThrow(() -> {
             throw new UserNotFoundException("User does not exist");
         }));
-        newRequest.setEvent(eventRepo.findById(eventId).orElseThrow(() -> {
-            throw new EventNotFoundException("Event does not exist");
-        }));
-        newRequest.setRequestStatus(RequestStatus.PENDING);
+        newRequest.setEvent(eventFound);
+        if(eventFound.getParticipationLimit() == 0) {
+            newRequest.setRequestStatus(RequestStatus.CONFIRMED);
+        } else {
+            newRequest.setRequestStatus(RequestStatus.PENDING);
+        }
         newRequest.setCreated(LocalDateTime.now());
         return RequestMapper.mapModelToDto(requestRepo.save(newRequest));
     }
