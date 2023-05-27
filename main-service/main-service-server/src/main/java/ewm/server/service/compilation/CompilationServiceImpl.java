@@ -1,5 +1,8 @@
 package ewm.server.service.compilation;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import ewm.server.dto.compilation.CompilationDto;
 import ewm.server.dto.compilation.NewCompilationDto;
 import ewm.server.dto.compilation.UpdateCompilationRequest;
@@ -7,14 +10,19 @@ import ewm.server.exception.compilation.CompilationNotFoundException;
 import ewm.server.exception.event.EventNotFoundException;
 import ewm.server.mapper.compilation.CompilationMapper;
 import ewm.server.model.compilation.Compilation;
+import ewm.server.model.compilation.QCompilation;
 import ewm.server.model.event.Event;
 import ewm.server.repo.compilation.CompilationRepo;
 import ewm.server.repo.event.EventRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +56,23 @@ public class CompilationServiceImpl implements CompilationService {
             throw new CompilationNotFoundException("Compilation does not exist");
         });
         return CompilationMapper.mapModelToDto(compilationFound);
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    @Override
+    public List<CompilationDto> getAllCompilations(Optional<Boolean> pinned, int from, int size) {
+        Pageable request = makePageRequest(from, size);
+        List<Compilation> compilations;
+        if(pinned.isEmpty()) {
+            compilations = compilationRepo.findAll(request).getContent();
+        } else {
+            compilations = compilationRepo.findAllByPinned(pinned.get());
+        }
+        return compilations.stream().map(CompilationMapper::mapModelToDto).collect(Collectors.toList());
+    }
+
+    private Pageable makePageRequest(int from, int size) {
+        return PageRequest.of(from > 0 ? from / size : 0, size);
     }
 
     private void updateTitle(Compilation toBeUpdated, UpdateCompilationRequest request) {
