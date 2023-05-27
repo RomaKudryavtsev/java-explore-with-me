@@ -7,6 +7,7 @@ import ewm.server.dto.event.*;
 import ewm.server.dto.request.ParticipationRequestDto;
 import ewm.server.exception.category.CategoryNotFoundException;
 import ewm.server.exception.event.EventNotFoundException;
+import ewm.server.exception.event.IllegalDatesException;
 import ewm.server.exception.event.UnknownActionException;
 import ewm.server.exception.user.UserNotFoundException;
 import ewm.server.mapper.event.EventMapper;
@@ -218,6 +219,9 @@ public class EventServiceImpl implements EventService {
             builder.and(annotationContainsText.or(descriptionContainsText));
         });
         categories.ifPresent(categoryIds -> builder.and(qEvent.category.id.in(categoryIds)));
+        if(rangeStart.isPresent() && rangeEnd.isPresent()) {
+            validateDates(rangeStart.get(), rangeEnd.get());
+        }
         rangeStart.ifPresent(start -> builder.and(qEvent.eventDate.after(parseDateTime(start))));
         rangeEnd.ifPresent(end -> builder.and(qEvent.eventDate.before(parseDateTime(end))));
         if (rangeStart.isEmpty() || rangeEnd.isEmpty()) {
@@ -225,6 +229,12 @@ public class EventServiceImpl implements EventService {
         }
         paid.ifPresent(bool -> builder.and(qEvent.paid.eq(bool)));
         return Expressions.asBoolean(builder.getValue());
+    }
+
+    private void validateDates(String rangeStart, String rangeEnd) {
+        if(parseDateTime(rangeStart).isAfter(parseDateTime(rangeEnd))) {
+            throw new IllegalDatesException("Range start has to be after range end");
+        }
     }
 
     private Location saveLocation(LocationDto locationDto) {
