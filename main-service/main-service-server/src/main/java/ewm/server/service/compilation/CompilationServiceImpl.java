@@ -1,8 +1,5 @@
 package ewm.server.service.compilation;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import ewm.server.dto.compilation.CompilationDto;
 import ewm.server.dto.compilation.NewCompilationDto;
 import ewm.server.dto.compilation.UpdateCompilationRequest;
@@ -10,7 +7,6 @@ import ewm.server.exception.compilation.CompilationNotFoundException;
 import ewm.server.exception.event.EventNotFoundException;
 import ewm.server.mapper.compilation.CompilationMapper;
 import ewm.server.model.compilation.Compilation;
-import ewm.server.model.compilation.QCompilation;
 import ewm.server.model.event.Event;
 import ewm.server.repo.compilation.CompilationRepo;
 import ewm.server.repo.event.EventRepo;
