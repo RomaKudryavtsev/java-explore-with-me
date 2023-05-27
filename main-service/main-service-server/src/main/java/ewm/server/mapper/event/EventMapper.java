@@ -37,7 +37,7 @@ public class EventMapper {
         event.setDescription(dto.getDescription());
         event.setPaid(dto.getPaid() == null ? false : dto.getPaid());
         event.setEventDate(LocalDateTime.parse(dto.getEventDate(), REQUEST_TIME_FORMAT));
-        event.setParticipationLimit(dto.getParticipantLimit());
+        event.setParticipationLimit(dto.getParticipantLimit() == null ? 0 : dto.getParticipantLimit());
         event.setRequestModeration(dto.getRequestModeration() == null ? true : dto.getRequestModeration());
         event.setTitle(dto.getTitle());
         return event;

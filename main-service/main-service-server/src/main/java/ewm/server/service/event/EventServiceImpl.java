@@ -212,7 +212,7 @@ public class EventServiceImpl implements EventService {
         categories.ifPresent(categoryIds -> builder.and(qEvent.category.id.in(categoryIds)));
         rangeStart.ifPresent(start -> builder.and(qEvent.eventDate.after(parseDateTime(start))));
         rangeEnd.ifPresent(end -> builder.and(qEvent.eventDate.before(parseDateTime(end))));
-        return Expressions.asBoolean(builder.getValue());
+        return builder.getValue() != null ? Expressions.asBoolean(builder.getValue()) : qEvent.isNotNull();
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
