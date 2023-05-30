@@ -1,5 +1,6 @@
 package ewm.server.service;
 
+import ewm.server.exception.IllegalDatesException;
 import ewm.server.mapper.StatsMapper;
 import ewm.server.repo.StatsRepo;
 import ewm.dto.StatsRequestDto;
@@ -36,6 +37,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsResponseDto> getStats(String start, String end, String[] uris, String unique) {
+        validateDates(start, end);
         if (unique == null && uris == null) {
             return statsRepo.getStatsForDates(parseDateTime(start), parseDateTime(end));
         } else if (unique != null && uris == null) {
@@ -52,6 +54,12 @@ public class StatsServiceImpl implements StatsService {
             } else {
                 return statsRepo.getStatsForDatesAndUris(parseDateTime(start), parseDateTime(end), uris);
             }
+        }
+    }
+
+    private void validateDates(String start, String end) {
+        if(parseDateTime(start).isAfter(parseDateTime(end))) {
+            throw new IllegalDatesException("Illegal dates");
         }
     }
 
