@@ -182,12 +182,21 @@ public class EventServiceImpl implements EventService {
                 .build();
     }
 
+    @Override
+    public List<ParticipationRequestDto> getRequestsToUsersEvent(Long userId, Long eventId) {
+        checkIfUserExists(userId);
+        Event eventFound = eventRepo.findById(eventId).orElseThrow(() -> {
+            throw new EventNotFoundException("Event does not exist");
+        });
+        return eventFound.getRequests().stream().map(RequestMapper::mapModelToDto).collect(Collectors.toList());
+    }
+
     private void rejectPendingRequestsIfParticipantLimitIsReached(List<ParticipationRequest> updatedRequests) {
         updatedRequests.stream()
                 .filter(r -> r.getEvent().getParticipationLimit() != 0 &&
-                r.getEvent().getParticipationLimit() == r.getEvent().getRequests().stream()
-                        .filter(r1 -> r1.getRequestStatus().equals(RequestStatus.CONFIRMED))
-                        .count())
+                        r.getEvent().getParticipationLimit() == r.getEvent().getRequests().stream()
+                                .filter(r1 -> r1.getRequestStatus().equals(RequestStatus.CONFIRMED))
+                                .count())
                 .filter(r -> r.getRequestStatus().equals(RequestStatus.PENDING))
                 .forEach(r -> r.setRequestStatus(RequestStatus.REJECTED));
         requestRepo.saveAllAndFlush(updatedRequests);
@@ -205,15 +214,6 @@ public class EventServiceImpl implements EventService {
         ) {
             throw new IllegalRequestException("Participant limit to one of events has been already reached");
         }
-    }
-
-    @Override
-    public List<ParticipationRequestDto> getRequestsToUsersEvent(Long userId, Long eventId) {
-        checkIfUserExists(userId);
-        Event eventFound = eventRepo.findById(eventId).orElseThrow(() -> {
-            throw new EventNotFoundException("Event does not exist");
-        });
-        return eventFound.getRequests().stream().map(RequestMapper::mapModelToDto).collect(Collectors.toList());
     }
 
     private void validateEventDate(LocalDateTime eventDate) {
