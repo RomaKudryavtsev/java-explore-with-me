@@ -4,6 +4,7 @@ import ewm.server.exception.category.CategoryNotFoundException;
 import ewm.server.exception.compilation.CompilationNotFoundException;
 import ewm.server.exception.event.EventNotFoundException;
 import ewm.server.exception.event.IllegalPublicationException;
+import ewm.server.exception.request.IllegalRequestException;
 import ewm.server.exception.user.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,9 +27,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({
+            IllegalPublicationException.class,
+            IllegalRequestException.class
+    })
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handeConflicts(final IllegalPublicationException e) {
+    public ErrorResponse handeConflicts(final RuntimeException e) {
         log.error(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
