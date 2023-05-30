@@ -3,6 +3,7 @@ package ewm.server.exception;
 import ewm.server.exception.category.CategoryNotFoundException;
 import ewm.server.exception.compilation.CompilationNotFoundException;
 import ewm.server.exception.event.EventNotFoundException;
+import ewm.server.exception.event.IllegalPublicationException;
 import ewm.server.exception.user.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +22,13 @@ public class ErrorHandler {
             CompilationNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundExceptions(final RuntimeException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handeConflicts(final IllegalPublicationException e) {
         log.error(e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
