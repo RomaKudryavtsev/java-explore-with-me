@@ -146,7 +146,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> {
                     throw new EventNotFoundException("Event not found");
                 });
-        return EventMapper.mapModelToFullDto(eventFound,statsClient);
+        return EventMapper.mapModelToFullDto(eventFound, statsClient);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private void checkIfUpdateRequestIsValid(RequestStatus status, List<ParticipationRequest> toBeUpdated) {
-        if(toBeUpdated.stream().anyMatch(r -> !r.getRequestStatus().equals(RequestStatus.PENDING))) {
+        if (toBeUpdated.stream().anyMatch(r -> !r.getRequestStatus().equals(RequestStatus.PENDING))) {
             throw new IllegalRequestException("Status update is available for pending requests only");
         }
         if (status.equals(RequestStatus.CONFIRMED) && toBeUpdated.stream()

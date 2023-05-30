@@ -1,6 +1,5 @@
 package ewm.server.dto.event;
 
-import ewm.server.dto.event.LocationDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
