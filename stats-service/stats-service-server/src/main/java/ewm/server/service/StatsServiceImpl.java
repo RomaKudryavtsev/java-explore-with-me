@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,7 +27,9 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional
-    public void saveRecord(StatsRequestDto request) {
+    public void saveRecord(StatsRequestDto request, HttpServletRequest meta) {
+        log.info(meta.getRemoteAddr());
+        request.setIp(meta.getRemoteAddr());
         statsRepo.save(StatsMapper.mapRequestToModel(request));
         log.info("RECORD SAVED");
     }
