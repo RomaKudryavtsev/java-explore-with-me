@@ -13,8 +13,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -33,14 +31,10 @@ public class Event {
     String title;
     @Column(name = "annotation")
     @NotBlank
-    @NotEmpty
-    @NotNull
     @Length(min = 20, max = 2000)
     String annotation;
     @Column(name = "description")
     @NotBlank
-    @NotEmpty
-    @NotNull
     @Length(min = 20, max = 7000)
     String description;
     @Column(name = "event_date")
