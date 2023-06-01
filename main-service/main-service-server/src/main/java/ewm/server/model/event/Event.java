@@ -26,7 +26,7 @@ import java.util.Set;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long eventId;
     @Column(name = "title")
     String title;
     @Column(name = "annotation")
@@ -52,7 +52,7 @@ public class Event {
     @Enumerated(EnumType.STRING)
     EventStatus eventStatus;
     @OneToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
     Location location;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

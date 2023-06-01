@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<UserDto> getUsersByIds(Long[] ids, Pageable request) {
-        return userRepo.findAllByIdIn(ids, request).getContent().stream()
+        return userRepo.findAllByUserIdIn(ids, request).getContent().stream()
                 .map(UserMapper::mapModelToDto).collect(Collectors.toList());
     }
 

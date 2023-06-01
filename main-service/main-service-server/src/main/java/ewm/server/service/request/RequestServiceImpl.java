@@ -70,7 +70,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<ParticipationRequestDto> getUsersRequests(Long userId) {
         QParticipationRequest qRequest = QParticipationRequest.participationRequest;
-        BooleanExpression byRequesterId = qRequest.requester.id.eq(userId);
+        BooleanExpression byRequesterId = qRequest.requester.userId.eq(userId);
         return StreamSupport.stream(requestRepo.findAll(byRequesterId).spliterator(), false)
                 .map(RequestMapper::mapModelToDto)
                 .collect(Collectors.toList());
@@ -99,13 +99,13 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private void checkIfInitiatorIsCreatingRequest(Long userId, Long eventId) {
-        if (Objects.equals(eventRepo.findById(eventId).orElseThrow().getInitiator().getId(), userId)) {
+        if (Objects.equals(eventRepo.findById(eventId).orElseThrow().getInitiator().getUserId(), userId)) {
             throw new IllegalRequestException("Initiator may not create request to participate in his own event");
         }
     }
 
     private void checkIfRequestWasAlreadyCreated(Long userId, Long eventId) {
-        if (requestRepo.findByRequester_IdAndEvent_Id(userId, eventId).isPresent()) {
+        if (requestRepo.findByRequester_UserIdAndEvent_EventId(userId, eventId).isPresent()) {
             throw new IllegalRequestException("Request was already created");
         }
     }
