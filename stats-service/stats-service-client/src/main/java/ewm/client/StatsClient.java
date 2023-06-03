@@ -1,8 +1,7 @@
-package ewm.client.client;
+package ewm.client;
 
 import ewm.dto.StatsRequestDto;
 import ewm.dto.StatsResponseDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -12,13 +11,12 @@ import java.util.Optional;
 
 @Service
 public class StatsClient {
-    @Value("${stats-service-server.url}")
-    private String baseUrl;
+    private static final String BASE_URL = "stats-server:9090";
     private final WebClient client = WebClient.create();
 
     public Mono<Void> saveRecord(StatsRequestDto request) {
         return client.post()
-                .uri(String.format("%s/hit", baseUrl))
+                .uri(String.format("%s/hit", BASE_URL))
                 .bodyValue(request)
                 .retrieve().bodyToMono(Void.class);
     }
@@ -35,7 +33,7 @@ public class StatsClient {
         Optional<String> uniqueOpt = Optional.ofNullable(unique);
         return client.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(String.format("%s/stats", baseUrl))
+                        .path(String.format("%s/stats", BASE_URL))
                         .queryParam("start", start)
                         .queryParam("end", end)
                         .queryParam("uris", uris)
@@ -48,7 +46,7 @@ public class StatsClient {
         Optional<String> uniqueOpt = Optional.ofNullable(unique);
         return client.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(String.format("%s/stats", baseUrl))
+                        .path(String.format("%s/stats", BASE_URL))
                         .queryParam("start", start)
                         .queryParam("end", end)
                         .queryParamIfPresent("unique", uniqueOpt)

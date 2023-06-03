@@ -1,5 +1,6 @@
 package ewm.server.service;
 
+import ewm.server.exception.IllegalDatesException;
 import ewm.server.mapper.StatsMapper;
 import ewm.server.repo.StatsRepo;
 import ewm.dto.StatsRequestDto;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,13 +28,16 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional
-    public void saveRecord(StatsRequestDto request) {
+    public void saveRecord(StatsRequestDto request, HttpServletRequest meta) {
+        log.info(meta.getRemoteAddr());
+        request.setIp(meta.getRemoteAddr());
         statsRepo.save(StatsMapper.mapRequestToModel(request));
         log.info("RECORD SAVED");
     }
 
     @Override
     public List<StatsResponseDto> getStats(String start, String end, String[] uris, String unique) {
+        validateDates(start, end);
         if (unique == null && uris == null) {
             return statsRepo.getStatsForDates(parseDateTime(start), parseDateTime(end));
         } else if (unique != null && uris == null) {
@@ -49,6 +54,12 @@ public class StatsServiceImpl implements StatsService {
             } else {
                 return statsRepo.getStatsForDatesAndUris(parseDateTime(start), parseDateTime(end), uris);
             }
+        }
+    }
+
+    private void validateDates(String start, String end) {
+        if (parseDateTime(start).isAfter(parseDateTime(end))) {
+            throw new IllegalDatesException("Illegal dates");
         }
     }
 
