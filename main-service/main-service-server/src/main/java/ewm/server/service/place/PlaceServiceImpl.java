@@ -1,10 +1,12 @@
 package ewm.server.service.place;
 
+import ewm.client.StatsClient;
 import ewm.server.dto.event.EventShortDto;
 import ewm.server.dto.event.LocationDto;
 import ewm.server.dto.place.PlaceDto;
 import ewm.server.exception.place.PlaceNotFoundException;
 import ewm.server.exception.user.UserNotFoundException;
+import ewm.server.mapper.event.EventMapper;
 import ewm.server.mapper.place.PlaceMapper;
 import ewm.server.model.place.Place;
 import ewm.server.repo.event.EventRepo;
@@ -23,8 +25,9 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PlaceServiceImpl implements PlaceService {
     UserRepo userRepo;
-    EventRepo eventRepo;
     PlaceRepo placeRepo;
+    EventRepo eventRepo;
+    StatsClient statsClient;
 
     @Override
     public PlaceDto addPlace(PlaceDto placeDto) {
@@ -42,13 +45,18 @@ public class PlaceServiceImpl implements PlaceService {
         Place placeToBeSearched = placeRepo.findById(placeId).orElseThrow(() -> {
             throw new PlaceNotFoundException(String.format("Place %d has not been added by admin", placeId));
         });
-        return null;
+        return eventRepo.findEventsNearby(placeToBeSearched.getLon(), placeToBeSearched.getLat(),
+                placeToBeSearched.getRadius()).stream()
+                .map(e -> EventMapper.mapModelToShortDto(e, statsClient))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<EventShortDto> getEventsNearbyUsersLocation(Long userId, LocationDto usersLocation) {
+    public List<EventShortDto> getEventsNearbyUsersLocation(Long userId, LocationDto usersLocation, Long radius) {
         checkIfUserExists(userId);
-        return null;
+        return eventRepo.findEventsNearby(usersLocation.getLon(), usersLocation.getLat(), radius.doubleValue()).stream()
+                .map(e -> EventMapper.mapModelToShortDto(e, statsClient))
+                .collect(Collectors.toList());
     }
 
     private void checkIfUserExists(Long userId) {
