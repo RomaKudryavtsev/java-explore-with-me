@@ -8,6 +8,7 @@ import ewm.server.exception.place.PlaceNotFoundException;
 import ewm.server.exception.user.UserNotFoundException;
 import ewm.server.mapper.event.EventMapper;
 import ewm.server.mapper.place.PlaceMapper;
+import ewm.server.model.event.EventStatus;
 import ewm.server.model.place.Place;
 import ewm.server.repo.event.EventRepo;
 import ewm.server.repo.place.PlaceRepo;
@@ -46,7 +47,9 @@ public class PlaceServiceImpl implements PlaceService {
             throw new PlaceNotFoundException(String.format("Place %d has not been added by admin", placeId));
         });
         return eventRepo.findEventsNearby(placeToBeSearched.getLon(), placeToBeSearched.getLat(),
-                placeToBeSearched.getRadius()).stream()
+                placeToBeSearched.getRadius())
+                .stream()
+                .filter(e -> e.getEventStatus().equals(EventStatus.PUBLISHED))
                 .map(e -> EventMapper.mapModelToShortDto(e, statsClient))
                 .collect(Collectors.toList());
     }
@@ -54,7 +57,9 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public List<EventShortDto> getEventsNearbyUsersLocation(Long userId, LocationDto usersLocation, Long radius) {
         checkIfUserExists(userId);
-        return eventRepo.findEventsNearby(usersLocation.getLon(), usersLocation.getLat(), radius.doubleValue()).stream()
+        return eventRepo.findEventsNearby(usersLocation.getLon(), usersLocation.getLat(), radius.doubleValue())
+                .stream()
+                .filter(e -> e.getEventStatus().equals(EventStatus.PUBLISHED))
                 .map(e -> EventMapper.mapModelToShortDto(e, statsClient))
                 .collect(Collectors.toList());
     }
