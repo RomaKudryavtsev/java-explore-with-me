@@ -26,7 +26,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"random place\",\r\n    \"lat\": 37.134,\r\n    \"lon\": 35.136,\r\n    \"radius\": 1\r\n}",
+					"raw": "{\r\n    \"name\": \"random place\",\r\n    \"latitude\": 37.134,\r\n    \"longitude\": 35.136,\r\n    \"radius\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,7 +68,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"another random place\",\r\n    \"lat\": 39.134,\r\n    \"lon\": 39.136,\r\n    \"radius\": 1\r\n}",
+					"raw": "{\r\n    \"name\": \"another random place\",\r\n    \"latitude\": 39.134,\r\n    \"longitude\": 39.136,\r\n    \"radius\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
