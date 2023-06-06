@@ -16,6 +16,6 @@ public interface EventRepo extends JpaRepository<Event, Long>, QuerydslPredicate
 
     @Query(value = "select * from events as e " +
             "join locations as l on e.location_id = l.location_id " +
-            "where distance(l.lat, l.lon, :lat, :lon) < :radius", nativeQuery = true)
-    List<Event> findEventsNearby(Double lon, Double lat, Double radius);
+            "where distance(l.lat, l.lon, :latitude, :longitude) < :radius", nativeQuery = true)
+    List<Event> findEventsNearby(Double longitude, Double latitude, Double radius);
 }
