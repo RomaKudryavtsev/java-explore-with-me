@@ -9,7 +9,7 @@ ExploreWithMe allows users to publish events, send participation requests, revie
 
 ### Tech stack
 
-ExploreWithMe adopts a microservices architecture, comprising a main service and a statistics service that collects statistics on event views by users.
+ExploreWithMe adopts a microservices architecture, comprising a main service and a statistics service that collects statistics on event views by users. Communication between services is done via HTTP using WebClient.
 
 Both services follow a RESTful design and are built using Spring Boot and Maven. Each service stores its data in a separate PostgreSQL database.
 
